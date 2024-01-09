@@ -60,13 +60,13 @@ def sendEmail(to, content):
     server.close()
 def get_weather(location):
     try:
-        observation = owm.weather_at_place(location)
-        weather = observation.get_weather()
-        temperature = weather.get_temperature()
-        status = weather.get_status()
-        return  f"The weather in {location} is {status} with a temperature of {temperature} degree Celsius"
-    except pyowm.exceptions.api_response_error.NotFoundError:
-        return "Sorry, the city name was not found"
+        observation = owm.weather_manager().weather_at_place(location)
+        weather = observation.weather
+        temperature = weather.temperature('celsius')['temp']
+        status = weather.detailed_status
+        return f"The weather in {location} is {status} with a temperature of {temperature} degrees Celsius."
+    except pyowm.exceptions.NotFoundError:
+        return "Sorry, the city name was not found."
     except Exception as e:
         return f"An error occurred: {str(e)}"
 
